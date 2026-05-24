@@ -1,0 +1,96 @@
+%%
+%% This is file `beamerthemetjbeamer.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% beamerthemetjbeamer.dtx  (with options: `package,maxplus,max,min,my')
+%% ------------------------------------------------------------------------
+%% Copyright (C) 2021-2026 TJG
+%% 
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%% 
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%% 
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%% ------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemetjbeamer}[2026/05/20 v3.2.0 tjbeamer parent theme]
+\DeclareOptionBeamer{maxplus}{
+  \def\tjbeamer@cover{maxplus}\def\tjbeamer@logopos{topright}}
+\DeclareOptionBeamer{max}{
+  \def\tjbeamer@cover{max}\def\tjbeamer@logopos{bottomright}}
+\DeclareOptionBeamer{min}{
+  \def\tjbeamer@cover{min}\def\tjbeamer@logopos{topright}}
+\DeclareOptionBeamer{my}{
+  \def\tjbeamer@cover{my}\def\tjbeamer@logopos{bottomright}}
+    % reserved for customization
+\ExecuteOptionsBeamer{
+  maxplus,
+  min,
+  my,
+  max,
+}
+\DeclareOptionBeamer{red}{\def\tjbeamer@color{red}}
+\DeclareOptionBeamer{blue}{\def\tjbeamer@color{blue}}
+\ExecuteOptionsBeamer{red}
+\DeclareOptionBeamer{light}{\def\tjbeamer@lum{light}}
+\DeclareOptionBeamer{dark}{\def\tjbeamer@lum{dark}}
+\ExecuteOptionsBeamer{dark}
+\DeclareOptionBeamer{zh}{\def\tjbeamer@lang{zh}}
+\DeclareOptionBeamer{en}{\def\tjbeamer@lang{en}}
+\@ifclassloaded{ctexbeamer}{\ExecuteOptionsBeamer{zh}}{
+  \ExecuteOptionsBeamer{en}}
+\DeclareOptionBeamer{miniframes}{\def\tjbeamer@nav{miniframes}}
+\DeclareOptionBeamer{infolines}{\def\tjbeamer@nav{infolines}}
+\DeclareOptionBeamer{sidebar}{\def\tjbeamer@nav{sidebar}}
+\DeclareOptionBeamer{default}{\def\tjbeamer@nav{default}}
+\DeclareOptionBeamer{smoothbars}{\def\tjbeamer@nav{smoothbars}}
+\DeclareOptionBeamer{split}{\def\tjbeamer@nav{split}}
+\DeclareOptionBeamer{shadow}{\def\tjbeamer@nav{shadow}}
+\DeclareOptionBeamer{tree}{\def\tjbeamer@nav{tree}}
+\DeclareOptionBeamer{smoothtree}{\def\tjbeamer@nav{smoothtree}}
+\ExecuteOptionsBeamer{miniframes}
+\DeclareOptionBeamer{topright}{\def\tjbeamer@logopos{topright}}
+\DeclareOptionBeamer{bottomright}{\def\tjbeamer@logopos{bottomright}}
+\ProcessOptionsBeamer
+\PassOptionsToPackage{\tjbeamer@cover}{beamerinnerthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@color}{beamercolorthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@color}{beamerinnerthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@lum}{beamercolorthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@lang}{beamerinnerthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@nav}{beamerouterthemetjbeamer}
+\PassOptionsToPackage{\tjbeamer@logopos}{beamerouterthemetjbeamer}
+\mode<presentation>
+\usecolortheme{tjbeamer}
+\usefonttheme{tjbeamer}
+\useinnertheme{tjbeamer}
+\useoutertheme{tjbeamer}
+\newrobustcmd*\usetjtheme[2][]{
+  \def\tjbeamer@mythemeoptions{#1}
+  \def\tjbeamer@mythemelist{#2}
+  \@for\tjbeamer@mythemename:=\tjbeamer@mythemelist\do{
+    \@for\tjbeamer@mythemeoption:=\tjbeamer@mythemeoptions\do{
+      \expandafter\def\csname tjbeamer@\tjbeamer@mythemename
+        @\tjbeamer@mythemeoption\endcsname{true}
+    }
+    \def\tjbeamer@mythemefile{tjbeamertheme\tjbeamer@mythemename.ltx}
+    \IfFileExists{\tjbeamer@mythemefile}{
+      \PackageWarning{\tjbeamer@mythemename}{
+        Local ltx file is found. For documentation use only. \MessageBreak
+        Move to \getcontribdir{\tjbeamer@mythemename} for release.
+        Unexpected error in other ltx may occur}
+      \renewcommand{\getcontribdir}[1]{.}
+    }{}
+    \input{\getcontribpath{\tjbeamer@mythemename}{\tjbeamer@mythemefile}}
+  }
+}
+\endinput
+%%
+%% End of file `beamerthemetjbeamer.sty'.

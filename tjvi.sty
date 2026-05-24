@@ -1,0 +1,243 @@
+%%
+%% This is file `tjvi.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% tjvi.dtx  (with options: `package')
+%% ------------------------------------------------------------------------
+%% Copyright (C) Tongji University
+%% The definition in this file is referred to the Visual Identity System
+%% from Tongji University (TJ).
+%% See https://github.com/TJ-CSCCG/tongji-visual for assets.
+%% 
+%% TJG implements the design but doesn't hold the copyright.
+%% Any commercial usage in this file should be acknowledged by
+%% the administration of TJ.
+%% More infomation about the license,
+%% see https://identity.tongji.edu.cn/
+%% ------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tjvi}[2026/05/20 v3.2.0 Visual Identity System library for tjbeamer]
+\newif\iftjbeamer@tempif%
+\newbox\tjbeamer@tempbox%
+\newskip\tjbeamer@h%
+\def\DefineOption#1#2#3{%
+  % #1: package
+  % #2: key
+  % #3: value
+  \DeclareOptionBeamer{#3}{\expandafter\def\csname tjbeamer@#1@#2\endcsname{#3}}%
+}
+\def\EqualOption{TT\fi\ifEqualOption}
+\def\ifEqualOption#1#2#3{%
+  % #1: package
+  % #2: key
+  % #3: value
+  \edef\tempvar{\csname tjbeamer@#1@#2\endcsname}%
+  \def\tempvalue{#3}%
+  \ifx\tempvar\tempvalue\tjbeamer@tempiftrue\else\tjbeamer@tempiffalse\fi%
+  \iftjbeamer@tempif%
+}
+\def\IsEmpty{TT\fi\ifIsEmpty}
+\def\ifIsEmpty#1{%
+  \setbox\tjbeamer@tempbox=\hbox\bgroup\def\\{}#1\unskip\egroup%
+  \ifdim\wd\tjbeamer@tempbox=0pt \tjbeamer@tempiftrue%
+  \else\tjbeamer@tempiffalse\fi%
+  \iftjbeamer@tempif%
+}
+\providecommand{\getcontribdir}[1]{contrib/#1}
+\providecommand{\getcontribpath}[2]{\getcontribdir{#1}/#2}
+\RequirePackage{tikz}
+\usetikzlibrary{fadings}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{external}
+\usetikzlibrary{backgrounds}
+\definecolor{tjRedPrimary}{RGB}{180,60,75}          % 同济红（淡）
+\definecolor{tjRedSecondary}{RGB}{220,170,90}       % 同济金（暖）
+\definecolor{tjRedTertiary}{RGB}{255,225,160}       % 浅金
+\definecolor{tjBluePrimary}{RGB}{50,90,160}         % 同济蓝（中浅，有存在感）
+\definecolor{tjBlueSecondary}{RGB}{110,150,200}     % 浅一档
+\definecolor{tjBlueTertiary}{RGB}{200,220,240}      % 极浅蓝
+\RequirePackage{array}
+\RequirePackage{graphicx}
+% \definelogo{name}{path}{h-clip}{v-clip}
+% h-clip / v-clip 兼容原 SJTUBeamer API 但已忽略——
+% 同济视觉素材（来自 tongji-visual）本身就是已上色矢量图，
+% 直接用 \includegraphics 保留原色，不再走 TikZ fading 蒙版。
+\newcommand{\definelogo}[4]{
+  \expandafter\providecommand\csname #1\endcsname[1][]{%
+    \tikzexternaldisable%
+    \begin{tikzpicture}
+      \node[inner sep=0pt, ##1] {\includegraphics[height=1.5cm]{#2}};
+    \end{tikzpicture}%
+  }
+}
+\definelogo{tjbadge}{tjvi/tongji-vi-badge.pdf}{0}{0}
+\definelogo{zhlogo}{tjvi/tongji-vi-zhlogo.pdf}{0}{0.30}
+\definelogo{enlogo}{tjvi/tongji-vi-enlogo.pdf}{0}{0.30}
+\definelogo{dlogo}{tjvi/tongji-vi-dlogo.pdf}{0}{0}
+\definelogo{vlogo}{tjvi/tongji-vi-vlogo.pdf}{0.8}{0.13}
+\definelogo{tjbg}{tjvi/tongji-vi-bg.pdf}{0}{0}
+\definelogo{tjgate}{tjvi/tongji-vi-photo.pdf}{0}{0}
+\newcommand{\secondaryinstlogo}[3][]{%
+  % #1: shortinst (optional)
+  % #2: longinst
+  % #3: logo
+  \hbox{%
+    \raggedright%
+    \resizebox{!}{1cm}{\vphantom{-}#3}%
+    \if\IsEmpty{#2}%
+    \else%
+      \if\IsEmpty{#1}%
+        \if\IsEmpty{#3}\else%
+          {\hskip0.31cm\vrule width0.5pt}\hskip0.31cm%
+        \fi%
+        \vbox to 1cm{%
+          \vfill%
+          \hbox{%
+            \noindent%
+            \fontsize{7pt}{0pt}\selectfont\mdseries\scshape%
+            \begin{tabular}{@{}l<{\vphantom{\vrule depth2pt}}@{}}
+              #2
+            \end{tabular}%
+          }%
+          \vskip-2pt%
+          \vfill%
+        }%
+      \else%
+        \if\IsEmpty{#3}\else%
+          {\hskip0.23cm\vrule width0.5pt}\hskip0.23cm%
+        \fi%
+        \vbox to 1cm{%
+          \def\\{}%
+          \vfill
+          \offinterlineskip
+          \hbox{%
+            \fontsize{13pt}{0pt}\selectfont%
+            \mdseries\sffamily #2%
+          }
+          \vskip0.08cm%
+          \hbox{%
+            \fontsize{5pt}{0pt}\selectfont%
+            \mdseries\scshape #1%
+          }
+          \vskip-\prevdepth\vskip0.14cm%
+        }%
+      \fi%
+    \fi%
+  }%
+}
+\providecommand{\stamptext}[2][structure]{
+  {
+    \providecolor{#1}{named}{tjRedPrimary}
+    \tikzset{external/export=false}
+    \begin{tikzpicture}[baseline=(nodetext.base)]
+      \node [white] (nodetext) at (0,0) {#2};
+      \pgfextracty{\tjbeamer@h}{\pgfpointanchor{nodetext}{north}}%
+      \pgfextracty{\pgf@ya}{\pgfpointanchor{nodetext}{south}}%
+      \addtolength{\tjbeamer@h}{-\pgf@ya}
+      \scoped[on background layer]
+        \fill [#1]
+          (-1.25*\tjbeamer@h,0)
+          -- (-0.85*\tjbeamer@h,0.3*\tjbeamer@h)
+          -- (-0.85*\tjbeamer@h,0.5*\tjbeamer@h)
+          -- (0.85*\tjbeamer@h,0.5*\tjbeamer@h)
+          -- (0.85*\tjbeamer@h,0.3*\tjbeamer@h)
+          -- (1.25*\tjbeamer@h,0)
+          -- (0.85*\tjbeamer@h,-0.3*\tjbeamer@h)
+          -- (0.85*\tjbeamer@h,-0.5*\tjbeamer@h)
+          -- (-0.85*\tjbeamer@h,-0.5*\tjbeamer@h)
+          -- (-0.85*\tjbeamer@h,-0.3*\tjbeamer@h) -- cycle;
+    \end{tikzpicture}
+  }
+}
+\def\tjbeamer@compatible@false{false}
+\ifx\tjbeamer@compatible\tjbeamer@compatible@false
+\else
+  \usetikzlibrary{patterns.meta}
+  \tikzdeclarepattern{
+    name=stamp,
+    parameters={
+        \pgfkeysvalueof{/pgf/pattern keys/size},
+        \pgfkeysvalueof{/pgf/pattern keys/xshift},
+        \pgfkeysvalueof{/pgf/pattern keys/yshift},
+      },
+    defaults={
+        size/.initial = 5pt,
+        xshift/.initial = 0pt,
+        yshift/.initial = 0pt,
+      },
+    bottom left={(
+        -0.5*\pgfkeysvalueof{/pgf/pattern keys/size}
+        +\pgfkeysvalueof{/pgf/pattern keys/xshift},
+        -0.4*\pgfkeysvalueof{/pgf/pattern keys/size}
+        +\pgfkeysvalueof{/pgf/pattern keys/yshift}
+        )},
+    top right={(
+        0.5*\pgfkeysvalueof{/pgf/pattern keys/size}
+        +\pgfkeysvalueof{/pgf/pattern keys/xshift},
+        0.4*\pgfkeysvalueof{/pgf/pattern keys/size}
+        +\pgfkeysvalueof{/pgf/pattern keys/yshift}
+        )},
+    tile size={(
+        \pgfkeysvalueof{/pgf/pattern keys/size},
+        0.8*\pgfkeysvalueof{/pgf/pattern keys/size}
+        )},
+    code={
+        \def\tjbeamer@s{\pgfkeysvalueof{/pgf/pattern keys/size}}%
+        \tikzset{x=0.5*\tjbeamer@s,y=0.2*\tjbeamer@s}
+        \fill[xshift=\pgfkeysvalueof{/pgf/pattern keys/xshift},
+          yshift=\pgfkeysvalueof{/pgf/pattern keys/yshift}]
+        (-0.25*\tjbeamer@s,0)
+        -- (-0.17*\tjbeamer@s,0.06*\tjbeamer@s)
+        -- (-0.17*\tjbeamer@s,0.1*\tjbeamer@s)
+        -- (0.17*\tjbeamer@s,0.1*\tjbeamer@s)
+        -- (0.17*\tjbeamer@s,0.06*\tjbeamer@s)
+        -- (0.25*\tjbeamer@s,0)
+        -- (0.17*\tjbeamer@s,-0.06*\tjbeamer@s)
+        -- (0.17*\tjbeamer@s,-0.1*\tjbeamer@s)
+        -- (-0.17*\tjbeamer@s,-0.1*\tjbeamer@s)
+        -- (-0.17*\tjbeamer@s,-0.06*\tjbeamer@s) -- cycle;
+      }
+  }
+\fi
+\ifx\tjbeamer@compatible\tjbeamer@compatible@false
+  \providecommand{\stamparray}[3]{}
+\else
+  \providecommand{\stamparray}[3]{
+    % #1: pattern size
+    % #2: starting point
+    % #3: ending point
+    \usebeamercolor{palette primary}
+    \fill [pattern={stamp[size=#1]},
+      pattern color=bg!50!fg] #2 rectangle #3;
+    \def\tjbeamer@s{#1}%
+    \pgfmathparse{0.5*\tjbeamer@s}\let\xs=\pgfmathresult%
+    \pgfmathparse{-0.4*\tjbeamer@s}\let\ys=\pgfmathresult%
+    \fill [pattern={stamp[size=#1,xshift=\xs, yshift=\ys]},
+      pattern color=bg!50!fg] #2 rectangle #3;
+  }
+\fi
+\pgfdeclaredecoration{stampline}{initial}
+{
+  \state{initial}[
+    width=\pgfdecorationsegmentlength,
+    auto corner on length=\pgfdecorationsegmentlength]
+  {
+    \def\tjbeamer@l{\pgfdecorationsegmentlength}%
+    \pgfpathlineto{\pgfpoint{0.25*\tjbeamer@l}{0pt}}
+    \pgfpathlineto{\pgfpoint{0.33*\tjbeamer@l}{0.06*\tjbeamer@l}}
+    \pgfpathlineto{\pgfpoint{0.33*\tjbeamer@l}{0.1*\tjbeamer@l}}
+    \pgfpathlineto{\pgfpoint{0.67*\tjbeamer@l}{0.1*\tjbeamer@l}}
+    \pgfpathlineto{\pgfpoint{0.67*\tjbeamer@l}{0.06*\tjbeamer@l}}
+    \pgfpathlineto{\pgfpoint{0.75*\tjbeamer@l}{0pt}}
+    \pgfpathlineto{\pgfpoint{\tjbeamer@l}{0pt}}
+  }
+  \state{final}
+  {
+    \pgfpathlineto{\pgfpointdecoratedpathlast}
+  }
+}
+\endinput
+%%
+%% End of file `tjvi.sty'.
